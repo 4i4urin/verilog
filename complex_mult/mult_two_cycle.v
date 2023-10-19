@@ -1,17 +1,18 @@
+`timescale 1ns/1ns
 
 module mult_8bit_sign (
 	input clk,    	 // Clock
-	input [7 : 0] a, // first number
-	input [7 : 0] b, // second number
+	input signed [7 : 0] a, // first number
+	input signed [7 : 0] b, // second number
 
-	output [7 : 0]res // multiply result
+	output signed [7 : 0]res // multiply result
 );
 
 
-integer i;
-reg [7 : 0] tmp [0 : 7];
-reg [7 : 0] res;
-
+integer i = 0;
+reg signed [7 : 0] tmp [0 : 7];
+reg signed [7 : 0] res = 0;
+reg a_sign = 0, b_sign = 0;
 
 always @(posedge clk) begin
 	for (i = 0; i < 7; i++) begin
@@ -29,7 +30,9 @@ always @(posedge clk) begin
 			tmp[ i ] <= ( a[i] ) ? b << i : 0;
 	end
 
-	if ( a[7] == 1 ^ b[7] == 1 )// a * b < 0
+	a_sign <= a[7]; b_sign <= b[7];
+
+	if ( a_sign == 1 ^ b_sign == 1 )// a * b < 0
 		res <= 1 + ~(
 			tmp[0] + tmp[1] + tmp[2] + tmp[3] + tmp[4] + tmp[5] + tmp[6]
 		);

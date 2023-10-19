@@ -4,15 +4,16 @@
 module complex_mult (
 	input clk,    // Clock
 
-	input [7 : 0] a1, // Real number 1
-	input [7 : 0] b1, // Img number 1
-	input [7 : 0] a2, // Real number 2
-	input [7 : 0] b2, // Img number 2
+	input signed [7 : 0] a1, // Real number 1
+	input signed [7 : 0] b1, // Img number 1
+	input signed [7 : 0] a2, // Real number 2
+	input signed [7 : 0] b2, // Img number 2
 
-	output [7 : 0] res_re, // Real mult result
-	output [7 : 0] res_im  // Img mult result
+	output signed [7 : 0] res_re, // Real mult result
+	output signed [7 : 0] res_im  // Img mult result
 );
 
+reg signed [7 : 0] a1_a2;
 wire signed [7 : 0] sub_res_re_1;
 wire signed [7 : 0] sub_res_re_2;
 wire signed [7 : 0] sub_res_im_1;
@@ -47,7 +48,7 @@ reg signed [7 : 0] res_re = 0;
 reg signed [7 : 0] res_im = 0;
 
 always @(posedge clk) begin 
-	res_re <= sub_res_re_2 - sub_res_re_1; //  a1*a2 - b1*b2
+	res_re <= sub_res_re_1 - sub_res_re_2; //  a1*a2 - b1*b2
 	res_im <= sub_res_im_1 + sub_res_im_2; // (a1*b2 + a2*b1) i
 end
 

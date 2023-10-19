@@ -1,11 +1,11 @@
 `timescale 1ns/1ns
 
 
-`define A1_RE -8'sd2
-`define B1_IM  8'sd4
+`define A1_RE -8'sd3
+`define B1_IM  8'sd9
 
-`define A2_RE  8'sd3
-`define B2_IM -8'sd7
+`define A2_RE  8'sd10
+`define B2_IM  8'sd9
 
 
 module tb_complex_mult ();
