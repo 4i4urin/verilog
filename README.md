@@ -71,3 +71,32 @@ res_re = sub_res_re_1 - sub_res_re_2 &emsp; res_im = sub_res_im_1 + sub_res_im_2
 
 
 ![alt text](https://github.com/4i4urin/verilog/blob/main/complex_mult/img/test_2.png)
+
+
+--------------------------------------------------------------------------------------------------------
+
+
+## Задание #2.1 Умножитель Бута
+**Рабочая дериктория /booth_multiplier**
+
+Задача 
+Реализовать умножитель по алгоритму Бута
+
+Вход
+- 2 знаковых 8 битных числа
+
+Выход 
+- 1 знаковое 8 битное число - результат произведения входных
+
+Алгоритм был взят тут
+
+https://ru.wikipedia.org/wiki/%D0%90%D0%BB%D0%B3%D0%BE%D1%80%D0%B8%D1%82%D0%BC_%D0%91%D1%83%D1%82%D0%B0
+
+Результаты моделировани
+
+num1, num2 - входные числа, res - результат произведения
+
+![alt text](https://github.com/4i4urin/verilog/blob/main/booth_multiplier/img/result.png)
+
+
+
