@@ -43,20 +43,14 @@ integer ii;
 
 always @(posedge clk) begin
     delay[0] <= input_sig;
-    // collection[0] <= ( (fir_coefs[0] * input_sig) >>> 8 ) & 16'shFF;
+    // collection[0] <= ( (fir_coefs[0] * input_sig) / 256;
     collection[0] <=
         ( ((fir_coefs[0] * input_sig) >>> 8) & 16'shFF ) & 16'sh80 ?
         ( ((fir_coefs[0] * input_sig) >>> 8) & 16'shFF ) + 16'sh1 : 
         ( (fir_coefs[0] * input_sig) >>> 8 ) & 16'shFF ;
 
-    // test <= (fir_coefs[38] * input_sig) / 256;
-    // test_shift <= 
-    //     ( ((fir_coefs[38] * input_sig) >>> 8) & 16'shFF ) & 16'sh80 ?
-    //     ( ((fir_coefs[38] * input_sig) >>> 8) & 16'shFF ) + 16'sh1 : 
-    //     ((fir_coefs[38] * input_sig) >>> 8) & 16'shFF ;
-
     for (ii = 1; ii < 74; ii = ii + 1) begin
-        // collection[ii] <= ( (fir_coefs[ii] * delay[ii - 1]) >>> 8 ) & 16'shFF;
+        // collection[ii] <= ( (fir_coefs[ii] * delay[ii - 1]) / 256;
         collection[ii] <=
             ( ((fir_coefs[ii] * delay[ii - 1]) >>> 8) & 16'shFF ) & 16'sh80 ?
             ( ((fir_coefs[ii] * delay[ii - 1]) >>> 8) & 16'shFF ) + 16'sh1 : 
