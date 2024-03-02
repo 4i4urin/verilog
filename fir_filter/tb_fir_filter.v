@@ -51,7 +51,8 @@ always @(posedge clk) begin
         // $fdisplay(File_id, output_sig);
     end
     else begin
-        $fclose(File_id);
+        if (signal)
+            $fclose(File_id);
         signal <= 0;
     end
         
