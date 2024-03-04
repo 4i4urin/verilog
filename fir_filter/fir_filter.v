@@ -17,17 +17,18 @@ initial begin
 end
 
 
-reg signed [15: 0] collection [0 : 79];
+reg signed [15: 0] collection [0 : 19];
 reg signed [7: 0] delay [0 : 79];
 reg init_flag = 0;
 
 integer i;
 always @(posedge clk) begin
     if (init_flag == 0) begin
-        for (i = 0; i < 80; i = i + 1) begin
-            collection[i] <= 0;
+        for (i = 0; i < 80; i = i + 1)
             delay[i] <= 0;
-        end
+
+        for (i = 0; i < 20; i = i + 1)
+            collection[i] <= 0;
         init_flag <= 1;
     end
 end
@@ -53,13 +54,14 @@ always @(posedge clk) begin
     end
 
     if (ready) begin
-        collection[index] <= fir_coefs[index] * delay[index];
-        collection[index + 1] <= fir_coefs[index + 1] * delay[index + 1];
-        collection[index + 2] <= fir_coefs[index + 2] * delay[index + 2];
-        collection[index + 3] <= fir_coefs[index + 3] * delay[index + 3];
+        collection[index >> 2] <= 
+            fir_coefs[index    ] * delay[index    ] + 
+            fir_coefs[index + 1] * delay[index + 1] +
+            fir_coefs[index + 2] * delay[index + 2] + 
+            fir_coefs[index + 3] * delay[index + 3];
 
         if (index)
-            coll_sum <= coll_sum + collection[index - 4] + collection[index - 3] + collection[index - 2] + collection[index - 1];
+            coll_sum <= coll_sum + collection[index >> 2];
         else 
             coll_sum <= 0;
     end
