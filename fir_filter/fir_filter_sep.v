@@ -10,7 +10,7 @@ module fir_filter_sep (
 );
 
 
-reg signed [7 : 0] fir_coefs [0 : 73];
+reg signed [7 : 0] fir_coefs [0 : 79];
 initial begin
     $readmemh("fir_coefs.txt", fir_coefs);
 end
