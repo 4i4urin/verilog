@@ -17,7 +17,6 @@ initial begin
 end
 
 
-reg signed [15: 0] collection [0 : 19];
 reg signed [7: 0] delay [0 : 79];
 reg init_flag = 0;
 
@@ -26,15 +25,13 @@ always @(posedge clk) begin
     if (init_flag == 0) begin
         for (i = 0; i < 80; i = i + 1)
             delay[i] <= 0;
-
-        for (i = 0; i < 20; i = i + 1)
-            collection[i] <= 0;
         init_flag <= 1;
     end
 end
 
 
 reg signed [15: 0] coll_sum = 0;
+reg signed [15: 0] tact_calc = 0;
 reg signed [7: 0] result = 0;
 reg [6 : 0] index = 0;
 
@@ -54,14 +51,14 @@ always @(posedge clk) begin
     end
 
     if (ready) begin
-        collection[index >> 2] <= 
+        tact_calc <= 
             fir_coefs[index    ] * delay[index    ] + 
             fir_coefs[index + 1] * delay[index + 1] +
             fir_coefs[index + 2] * delay[index + 2] + 
             fir_coefs[index + 3] * delay[index + 3];
 
         if (index)
-            coll_sum <= coll_sum + collection[index >> 2];
+            coll_sum <= coll_sum + tact_calc;
         else 
             coll_sum <= 0;
     end

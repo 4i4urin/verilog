@@ -30,7 +30,8 @@ fir_filter_sep fir_filter_sep(
     .clk (clk),
 
     .input_sig (signal),
-
+    .ready (ready),
+    
     .output_sig(output_sig_upd)
 );
 
@@ -56,8 +57,8 @@ always @(posedge clk) begin
             signal <= input_signal[index];
             index <= index + 1; 
             signal_delay <= 0;
-            // $fdisplay(File_id, output_sig_upd);
-            $fdisplay(File_id, output_sig);
+            $fdisplay(File_id, output_sig_upd);
+            // $fdisplay(File_id, output_sig);
         end 
     end
     else begin
