@@ -56,26 +56,27 @@ always @(posedge clk) begin
     end
 
     if (ready) begin
+
         for (ii = 0; ii < 4; ii = ii + 1)
             if ( (fir_coefs[index + ii] ^ delay[index + ii]) & 8'sh80 ) begin
-                tact_calc_neg[ii] <= fir_coefs[index + ii] * delay[index + ii];
+                tact_calc_neg[ii] <= fir_coefs[index + ii] * delay[index + ii] - 1;
                 tact_calc_pos[ii] <= 0; 
             end
             else begin
-                tact_calc_neg[ii] <= 0;
+                tact_calc_neg[ii] <= -1;
                 tact_calc_pos[ii] <= fir_coefs[index + ii] * delay[index + ii]; 
             end 
 
+
         if (index) begin
             coll_sum_pos <= coll_sum_pos + tact_calc_pos[0] + tact_calc_pos[1] + tact_calc_pos[2] + tact_calc_pos[3];
-            coll_sum_neg <= coll_sum_neg + tact_calc_neg[0] + tact_calc_neg[1] + tact_calc_neg[2] + tact_calc_neg[3];
+            coll_sum_neg <= coll_sum_neg + tact_calc_neg[0] + tact_calc_neg[1] + tact_calc_neg[2] + tact_calc_neg[3] + 4; 
         end
         else begin
             coll_sum_pos <= 0;
             coll_sum_neg <= 0;
         end
     end
-
 end
 
 
