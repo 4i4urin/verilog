@@ -32,17 +32,10 @@ end
 
 
 reg signed [15: 0] coll_sum_pos = 0;
-reg signed [15: 0] coll_sum_neg = 0;
+reg signed [16: 0] coll_sum_neg = 0;
 
-reg signed [15: 0] tact_calc_neg_0 = 0;
-reg signed [15: 0] tact_calc_neg_1 = 0;
-reg signed [15: 0] tact_calc_neg_2 = 0;
-reg signed [15: 0] tact_calc_neg_3 = 0;
-
-reg signed [15: 0] tact_calc_pos_0 = 0;
-reg signed [15: 0] tact_calc_pos_1 = 0;
-reg signed [15: 0] tact_calc_pos_2 = 0;
-reg signed [15: 0] tact_calc_pos_3 = 0;
+reg signed [16: 0] tact_calc_neg [0 : 3];
+reg        [15: 0] tact_calc_pos [0 : 3];
 
 reg signed [7 : 0] result = 0;
 reg [6 : 0] index = 0;
@@ -63,54 +56,28 @@ always @(posedge clk) begin
     end
 
     if (ready) begin
-        if ( (fir_coefs[index] ^ delay[index]) & 8'sh80 ) begin
-            tact_calc_neg_0 <= fir_coefs[index] * delay[index];
-            tact_calc_pos_0 <= 0; 
-        end
-        else begin
-            tact_calc_neg_0 <= 0;
-            tact_calc_pos_0 <= fir_coefs[index] * delay[index]; 
-        end 
-
-        if ( (fir_coefs[index+1] ^ delay[index+1]) & 8'sh80 ) begin
-            tact_calc_neg_1 <= fir_coefs[index+1] * delay[index+1];
-            tact_calc_pos_1 <= 0; 
-        end
-        else begin
-            tact_calc_neg_1 <= 0;
-            tact_calc_pos_1 <= fir_coefs[index+1] * delay[index+1];
-        end 
-
-        if ( (fir_coefs[index+2] ^ delay[index+2]) & 8'sh80 ) begin
-            tact_calc_neg_2 <= fir_coefs[index+2] * delay[index+2];
-            tact_calc_pos_2 <= 0; 
-        end
-        else begin
-            tact_calc_neg_2 <= 0;
-            tact_calc_pos_2 <= fir_coefs[index+2] * delay[index+2];
-        end 
-
-        if ( (fir_coefs[index+3] ^ delay[index+3]) & 8'sh80 ) begin
-            tact_calc_neg_3 <= fir_coefs[index+3] * delay[index+3];
-            tact_calc_pos_3 <= 0; 
-        end
-        else begin
-            tact_calc_neg_3 <= 0;
-            tact_calc_pos_3 <= fir_coefs[index+3] * delay[index+3];
-        end 
+        for (ii = 0; ii < 4; ii = ii + 1)
+            if ( (fir_coefs[index + ii] ^ delay[index + ii]) & 8'sh80 ) begin
+                tact_calc_neg[ii] <= fir_coefs[index + ii] * delay[index + ii];
+                tact_calc_pos[ii] <= 0; 
+            end
+            else begin
+                tact_calc_neg[ii] <= 0;
+                tact_calc_pos[ii] <= fir_coefs[index + ii] * delay[index + ii]; 
+            end 
 
         if (index) begin
-            coll_sum_pos <= coll_sum_pos + tact_calc_pos_0 + tact_calc_pos_1 + tact_calc_pos_2 + tact_calc_pos_3;
-            coll_sum_neg <= coll_sum_neg + tact_calc_neg_0 + tact_calc_neg_1 + tact_calc_neg_2 + tact_calc_neg_3; 
+            coll_sum_pos <= coll_sum_pos + tact_calc_pos[0] + tact_calc_pos[1] + tact_calc_pos[2] + tact_calc_pos[3];
+            coll_sum_neg <= coll_sum_neg + tact_calc_neg[0] + tact_calc_neg[1] + tact_calc_neg[2] + tact_calc_neg[3];
         end
         else begin
             coll_sum_pos <= 0;
             coll_sum_neg <= 0;
-        end 
-            
+        end
     end
 
 end
+
 
 
 assign output_sig = result;
