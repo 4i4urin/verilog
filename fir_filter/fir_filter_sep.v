@@ -7,7 +7,7 @@ module fir_filter_sep (
     input signed  [7 : 0] input_sig,
     input ready,
 
-    output signed [7 : 0] output_sig
+    output signed [7 : 0] filtred_sig
 );
 
 
@@ -48,7 +48,7 @@ always @(posedge clk) begin
         index <= index + 4;
     else begin
         index <= 0;
-        result <= ((coll_sum_pos + coll_sum_neg) >>> 8) & 16'shFF;
+        result <= ((coll_sum_pos + coll_sum_neg + 1) >>> 8) & 16'shFF;
 
         delay[0] <= input_sig;
         for (ii = 1; ii < 80; ii = ii + 1) 
@@ -74,13 +74,13 @@ always @(posedge clk) begin
         end
         else begin
             coll_sum_pos <= 0;
-            coll_sum_neg <= 0;
+            coll_sum_neg <= -1;
         end
     end
 end
 
 
 
-assign output_sig = result;
+assign filtred_sig = result;
 
 endmodule

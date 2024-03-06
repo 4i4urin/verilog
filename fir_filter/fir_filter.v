@@ -7,7 +7,7 @@ module fir_filter (
     input signed  [7 : 0] input_sig,
     input ready,
 
-    output signed [7 : 0] output_sig
+    output signed [7 : 0] filtred_sig
 );
 
 
@@ -65,6 +65,6 @@ always @(posedge clk) begin
 end
 
 
-assign output_sig = result;
+assign filtred_sig = result;
 
 endmodule

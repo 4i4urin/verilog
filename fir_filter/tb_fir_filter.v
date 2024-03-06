@@ -13,8 +13,8 @@ initial
 
 reg  signed [7 : 0] signal = 0;
 reg ready = 0;
-wire signed [7 : 0] output_sig;
-wire signed [7 : 0] output_sig_upd;
+wire signed [7 : 0] filtred_sig;
+wire signed [7 : 0] filtred_sig_sep;
 
 
 fir_filter fir_filter(
@@ -23,7 +23,7 @@ fir_filter fir_filter(
     .input_sig (signal),
     .ready (ready),
 
-    .output_sig(output_sig)
+    .filtred_sig(filtred_sig)
 );
 
 fir_filter_sep fir_filter_sep(
@@ -32,7 +32,7 @@ fir_filter_sep fir_filter_sep(
     .input_sig (signal),
     .ready (ready),
     
-    .output_sig(output_sig_upd)
+    .filtred_sig(filtred_sig_sep)
 );
 
 
@@ -57,8 +57,8 @@ always @(posedge clk) begin
             signal <= input_signal[index];
             index <= index + 1; 
             signal_delay <= 0;
-            $fdisplay(File_id, output_sig_upd);
-            // $fdisplay(File_id, output_sig);
+            $fdisplay(File_id, filtred_sig_sep);
+            // $fdisplay(File_id, filtred_sig);
         end 
     end
     else begin
