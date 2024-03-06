@@ -32,7 +32,7 @@ end
 
 
 reg signed [15: 0] coll_sum_pos = 0;
-reg signed [16: 0] coll_sum_neg = 0;
+reg signed [16: 0] coll_sum_neg = -1;
 
 reg signed [16: 0] tact_calc_neg [0 : 3];
 reg        [15: 0] tact_calc_pos [0 : 3];
