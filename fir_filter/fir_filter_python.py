@@ -46,7 +46,6 @@ cutoff_hz = 10.0
 taps = firwin(N, cutoff_hz/nyq_rate, window=('kaiser', beta))
 
 taps = (taps * 256).astype(int)
-print(taps)
 
 
 # Use lfilter to filter x with the FIR filter.
