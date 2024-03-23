@@ -16,28 +16,34 @@ reg signed [17: 0] delay [0 : 127];
 reg init_flag = 0;
 
 
+integer i;
+
+initial 
+    for (i = 0; i < 128; i = i + 1)
+        delay[i] = 0;
+
 reg signed [17: 0] coll_sum = 0;
-reg signed [17: 0] tact_calc = 0;
 reg signed [17: 0] result = 0;
 
-reg [6 : 0] index = 0;
+reg [6 : 0] r_index = 8'h7F;
+reg [6 : 0] w_index = 0;
 
-integer i;
 
 always @(posedge clk) begin
 
     if (ready) begin
-        index <= index + 1;
-        coll_sum <= coll_sum + fir_coefs[index] * delay[index];
+        r_index <= r_index + 1;
+        if ( r_index )
+            coll_sum <= coll_sum + fir_coefs[r_index] * delay[(w_index - r_index - 1) & 8'h7F];
+        else
+            coll_sum <= fir_coefs[r_index] * delay[(w_index - r_index - 1) & 8'h7F];
     end       
 
-    if ( !index ) begin
+    if ( r_index == 8'h7F && ready) begin
         result <= (coll_sum >>> 8);// & 18'sh3FF;
-        coll_sum <= 0;
-
-        delay[0] <= input_sig;
-        for (i = 1; i < 128; i = i + 1) 
-            delay[i] <= delay[i - 1];
+        
+        w_index <= w_index + 1;
+        delay[w_index] <= input_sig;
     end
 end
 
