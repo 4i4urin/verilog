@@ -17,8 +17,8 @@ x = cos(2*pi*0.5*t) + 0.2*sin(2*pi*2.5*t+0.1) + \
 # x = (x - min(x))
 x = x * 255 / (max(x) - min(x)) - 3
 x = x.astype(int)
-print(x)
-print(max(x), min(x))
+# print(x)
+# print(max(x), min(x))
 
 
 #------------------------------------------------
@@ -31,14 +31,15 @@ nyq_rate = sample_rate / 2.0
 # The desired width of the transition from pass to stop,
 # relative to the Nyquist rate.  We'll design the filter
 # with a 5 Hz transition width.
-width = 5.0/nyq_rate
+width = 3.0/nyq_rate
 
 # The desired attenuation in the stop band, in dB.
-ripple_db = 60.0
+ripple_db = 70.0
 
 # Compute the order and Kaiser parameter for the FIR filter.
 N, beta = kaiserord(ripple_db, width)
-
+# after func N = 146
+N = 128
 # The cutoff frequency of the filter.
 cutoff_hz = 10.0
 
@@ -46,7 +47,7 @@ cutoff_hz = 10.0
 taps = firwin(N, cutoff_hz/nyq_rate, window=('kaiser', beta))
 
 taps = (taps * 256).astype(int)
-
+# print(taps)
 
 # Use lfilter to filter x with the FIR filter.
 filtered_x = (lfilter(taps, 1.0, x) / 256).astype(int)
