@@ -3,11 +3,11 @@
 module socket (
     input clk,
 
-    input signed [17 : 0] input_sig,
+    input signed [`WIDTH - 1 : 0] input_sig,
     input ready,
 
-    output signed [17 : 0] filtred_sig,
-    output signed [17 : 0] filtred_sig_sep  
+    output signed [`WIDTH - 1 : 0] filtred_sig,
+    output signed [`WIDTH - 1 : 0] filtred_sig_sep  
 );
 
 fir_filter fir_filter(
