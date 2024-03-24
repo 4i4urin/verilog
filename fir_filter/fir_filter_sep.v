@@ -41,9 +41,9 @@ always @(posedge clk) begin
 
     if (ready) begin
         r_index <= r_index + 1;
-        
+
         if (r_index)
-            if ( fir_coefs[r_index] ^ delay[(w_index - r_index - 1) & 8'h7F] & `WIDTH'h80000)
+            if ( (fir_coefs[r_index] ^ delay[(w_index - r_index - 1) & 8'h7F]) & 16'sh8000)
                 coll_sum_neg <= coll_sum_neg + fir_coefs[r_index] * delay[(w_index - r_index - 1) & 8'h7F];
             else
                 coll_sum_pos <= coll_sum_pos + fir_coefs[r_index] * delay[(w_index - r_index - 1) & 8'h7F];
