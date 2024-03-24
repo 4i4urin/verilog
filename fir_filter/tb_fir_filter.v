@@ -47,8 +47,8 @@ always @(posedge clk) begin
             ready <= 1;
             signal <= input_signal[index];
             index <= index + 1;
-            // $fdisplay(File_id, filtred_sig_sep);
-            $fdisplay(File_id, filtred_sig);
+            $fdisplay(File_id, filtred_sig_sep);
+            // $fdisplay(File_id, filtred_sig);
         end
     end
     else begin

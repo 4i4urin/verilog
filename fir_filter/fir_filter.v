@@ -13,7 +13,6 @@ module fir_filter (
 wire signed [17 : 0] fir_coefs [0 : 127];
 
 reg signed [17: 0] delay [0 : 127];
-reg init_flag = 0;
 
 
 integer i;

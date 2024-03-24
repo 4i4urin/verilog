@@ -19,13 +19,13 @@ fir_filter fir_filter(
     .filtred_sig (filtred_sig)
 );
 
-// fir_filter_sep fir_filter_sep(
-//     .clk (clk),
+fir_filter_sep fir_filter_sep(
+    .clk (clk),
 
-//     .input_sig (input_sig),
-//     .ready (ready),
+    .input_sig (input_sig),
+    .ready (ready),
 
-//     .filtred_sig (filtred_sig_sep)
-// );
+    .filtred_sig (filtred_sig_sep)
+);
 
 endmodule

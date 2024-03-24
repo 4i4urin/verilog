@@ -4,176 +4,211 @@
 module fir_filter_sep (
     input clk,    // Clock
 
-    input signed  [7 : 0] input_sig,
+    input signed  [17 : 0] input_sig,
     input ready,
 
-    output signed [7 : 0] filtred_sig
+    output signed [17 : 0] filtred_sig
 );
 
 
-wire signed [7 : 0] fir_coefs [0 : 79];
+wire signed [17 : 0] fir_coefs [0 : 127];
+reg signed [17: 0] delay [0 : 127];
+
+integer i;
+
+initial 
+    for (i = 0; i < 128; i = i + 1)
+        delay[i] = 0;
+
+
+reg signed [17: 0] coll_sum_pos = 0;
+reg signed [17: 0] coll_sum_neg = -1;
+
+// reg signed [17: 0] tact_calc_neg [0 : 3];
+// reg        [17: 0] tact_calc_pos [0 : 3];
+
+reg signed [17 : 0] result = 0;
+
+reg [6 : 0] r_index = 8'h7F;
+reg [6 : 0] w_index = 0;
+
+always @(posedge clk) begin
+
+    if ( r_index == 8'h7F && ready) begin
+        result <= ((coll_sum_pos + coll_sum_neg + 1) >>> 8);// & 18'sh3FF;
+        
+        w_index <= w_index + 1;
+        delay[w_index] <= input_sig;
+    end
+
+    if (ready) begin
+        r_index <= r_index + 1;
+        if (r_index)
+            if ( (fir_coefs[r_index] ^ delay[(w_index - r_index - 1) & 8'h7F]) & 8'sh80 )
+                coll_sum_neg <= coll_sum_neg + fir_coefs[r_index] * delay[(w_index - r_index - 1) & 8'h7F]; 
+            else
+                coll_sum_pos <= coll_sum_pos + fir_coefs[r_index] * delay[(w_index - r_index - 1) & 8'h7F];
+        else begin
+            coll_sum_pos <= 0;
+            coll_sum_neg <= -1;
+        end
+
+    end
+end
+
+
+assign filtred_sig = result;
+
 // # python3
 // from scipy.signal import kaiserord, firwin
 
 // sample_rate = 100.0
 // nyq_rate = sample_rate / 2.0
-// width = 5.0/nyq_rate
-// ripple_db = 60.0
+// width = 3.0/nyq_rate
+// ripple_db = 70.0
 
 // # Compute the order and Kaiser parameter for the FIR filter.
-// N, beta = kaiserord(ripple_db, width)
+// N, beta = kaiserord(ripple_db, width) # N = 146 decrease to 128
 // cutoff_hz = 10.0
 
-// taps = firwin(N, cutoff_hz/nyq_rate, window=('kaiser', beta))
+// taps = firwin(128, cutoff_hz/nyq_rate, window=('kaiser', beta))
 // taps = (taps * 256).astype(int)
 // count = 0
 // for tap in taps:
 //     print(f"assign fir_coefs[{count}] = ", end="")
 //     if tap < 0:
-//         print(f"-8'sd{abs(tap)};")
+//         print(f"-18'sd{abs(tap)};")
 //     else:
-//         print(f"8'sd{tap};")
+//         print(f"18'sd{tap};")
 //     count += 1
-assign fir_coefs[0] = 8'sd0;
-assign fir_coefs[1] = 8'sd0;
-assign fir_coefs[2] = 8'sd0;
-assign fir_coefs[3] = 8'sd0;
-assign fir_coefs[4] = 8'sd0;
-assign fir_coefs[5] = 8'sd0;
-assign fir_coefs[6] = 8'sd0;
-assign fir_coefs[7] = 8'sd0;
-assign fir_coefs[8] = 8'sd0;
-assign fir_coefs[9] = 8'sd0;
-assign fir_coefs[10] = 8'sd0;
-assign fir_coefs[11] = 8'sd0;
-assign fir_coefs[12] = 8'sd0;
-assign fir_coefs[13] = 8'sd0;
-assign fir_coefs[14] = 8'sd1;
-assign fir_coefs[15] = 8'sd1;
-assign fir_coefs[16] = 8'sd0;
-assign fir_coefs[17] = 8'sd0;
-assign fir_coefs[18] = -8'sd1;
-assign fir_coefs[19] = -8'sd2;
-assign fir_coefs[20] = -8'sd2;
-assign fir_coefs[21] = -8'sd1;
-assign fir_coefs[22] = 8'sd1;
-assign fir_coefs[23] = 8'sd3;
-assign fir_coefs[24] = 8'sd4;
-assign fir_coefs[25] = 8'sd4;
-assign fir_coefs[26] = 8'sd1;
-assign fir_coefs[27] = -8'sd2;
-assign fir_coefs[28] = -8'sd6;
-assign fir_coefs[29] = -8'sd9;
-assign fir_coefs[30] = -8'sd9;
-assign fir_coefs[31] = -8'sd4;
-assign fir_coefs[32] = 8'sd5;
-assign fir_coefs[33] = 8'sd18;
-assign fir_coefs[34] = 8'sd32;
-assign fir_coefs[35] = 8'sd43;
-assign fir_coefs[36] = 8'sd50;
-assign fir_coefs[37] = 8'sd50;
-assign fir_coefs[38] = 8'sd43;
-assign fir_coefs[39] = 8'sd32;
-assign fir_coefs[40] = 8'sd18;
-assign fir_coefs[41] = 8'sd5;
-assign fir_coefs[42] = -8'sd4;
-assign fir_coefs[43] = -8'sd9;
-assign fir_coefs[44] = -8'sd9;
-assign fir_coefs[45] = -8'sd6;
-assign fir_coefs[46] = -8'sd2;
-assign fir_coefs[47] = 8'sd1;
-assign fir_coefs[48] = 8'sd4;
-assign fir_coefs[49] = 8'sd4;
-assign fir_coefs[50] = 8'sd3;
-assign fir_coefs[51] = 8'sd1;
-assign fir_coefs[52] = -8'sd1;
-assign fir_coefs[53] = -8'sd2;
-assign fir_coefs[54] = -8'sd2;
-assign fir_coefs[55] = -8'sd1;
-assign fir_coefs[56] = 8'sd0;
-assign fir_coefs[57] = 8'sd0;
-assign fir_coefs[58] = 8'sd1;
-assign fir_coefs[59] = 8'sd1;
-assign fir_coefs[60] = 8'sd0;
-assign fir_coefs[61] = 8'sd0;
-assign fir_coefs[62] = 8'sd0;
-assign fir_coefs[63] = 8'sd0;
-assign fir_coefs[64] = 8'sd0;
-assign fir_coefs[65] = 8'sd0;
-assign fir_coefs[66] = 8'sd0;
-assign fir_coefs[67] = 8'sd0;
-assign fir_coefs[68] = 8'sd0;
-assign fir_coefs[69] = 8'sd0;
-assign fir_coefs[70] = 8'sd0;
-assign fir_coefs[71] = 8'sd0;
-assign fir_coefs[72] = 8'sd0;
-assign fir_coefs[73] = 8'sd0;
+assign fir_coefs[0] = 18'sd0;
+assign fir_coefs[1] = 18'sd0;
+assign fir_coefs[2] = 18'sd0;
+assign fir_coefs[3] = 18'sd0;
+assign fir_coefs[4] = 18'sd0;
+assign fir_coefs[5] = 18'sd0;
+assign fir_coefs[6] = 18'sd0;
+assign fir_coefs[7] = 18'sd0;
+assign fir_coefs[8] = 18'sd0;
+assign fir_coefs[9] = 18'sd0;
+assign fir_coefs[10] = 18'sd0;
+assign fir_coefs[11] = 18'sd0;
+assign fir_coefs[12] = 18'sd0;
+assign fir_coefs[13] = 18'sd0;
+assign fir_coefs[14] = 18'sd0;
+assign fir_coefs[15] = 18'sd0;
+assign fir_coefs[16] = 18'sd0;
+assign fir_coefs[17] = 18'sd0;
+assign fir_coefs[18] = 18'sd0;
+assign fir_coefs[19] = 18'sd0;
+assign fir_coefs[20] = 18'sd0;
+assign fir_coefs[21] = 18'sd0;
+assign fir_coefs[22] = 18'sd0;
+assign fir_coefs[23] = 18'sd0;
+assign fir_coefs[24] = 18'sd0;
+assign fir_coefs[25] = 18'sd0;
+assign fir_coefs[26] = 18'sd0;
+assign fir_coefs[27] = 18'sd0;
+assign fir_coefs[28] = 18'sd0;
+assign fir_coefs[29] = 18'sd0;
+assign fir_coefs[30] = 18'sd0;
+assign fir_coefs[31] = 18'sd1;
+assign fir_coefs[32] = 18'sd0;
+assign fir_coefs[33] = 18'sd0;
+assign fir_coefs[34] = 18'sd0;
+assign fir_coefs[35] = -18'sd1;
+assign fir_coefs[36] = -18'sd1;
+assign fir_coefs[37] = -18'sd1;
+assign fir_coefs[38] = 18'sd0;
+assign fir_coefs[39] = 18'sd0;
+assign fir_coefs[40] = 18'sd1;
+assign fir_coefs[41] = 18'sd2;
+assign fir_coefs[42] = 18'sd2;
+assign fir_coefs[43] = 18'sd0;
+assign fir_coefs[44] = 18'sd0;
+assign fir_coefs[45] = -18'sd2;
+assign fir_coefs[46] = -18'sd3;
+assign fir_coefs[47] = -18'sd3;
+assign fir_coefs[48] = -18'sd1;
+assign fir_coefs[49] = 18'sd1;
+assign fir_coefs[50] = 18'sd4;
+assign fir_coefs[51] = 18'sd5;
+assign fir_coefs[52] = 18'sd5;
+assign fir_coefs[53] = 18'sd2;
+assign fir_coefs[54] = -18'sd2;
+assign fir_coefs[55] = -18'sd7;
+assign fir_coefs[56] = -18'sd10;
+assign fir_coefs[57] = -18'sd9;
+assign fir_coefs[58] = -18'sd4;
+assign fir_coefs[59] = 18'sd5;
+assign fir_coefs[60] = 18'sd18;
+assign fir_coefs[61] = 18'sd32;
+assign fir_coefs[62] = 18'sd43;
+assign fir_coefs[63] = 18'sd50;
+assign fir_coefs[64] = 18'sd50;
+assign fir_coefs[65] = 18'sd43;
+assign fir_coefs[66] = 18'sd32;
+assign fir_coefs[67] = 18'sd18;
+assign fir_coefs[68] = 18'sd5;
+assign fir_coefs[69] = -18'sd4;
+assign fir_coefs[70] = -18'sd9;
+assign fir_coefs[71] = -18'sd10;
+assign fir_coefs[72] = -18'sd7;
+assign fir_coefs[73] = -18'sd2;
+assign fir_coefs[74] = 18'sd2;
+assign fir_coefs[75] = 18'sd5;
+assign fir_coefs[76] = 18'sd5;
+assign fir_coefs[77] = 18'sd4;
+assign fir_coefs[78] = 18'sd1;
+assign fir_coefs[79] = -18'sd1;
+assign fir_coefs[80] = -18'sd3;
+assign fir_coefs[81] = -18'sd3;
+assign fir_coefs[82] = -18'sd2;
+assign fir_coefs[83] = 18'sd0;
+assign fir_coefs[84] = 18'sd0;
+assign fir_coefs[85] = 18'sd2;
+assign fir_coefs[86] = 18'sd2;
+assign fir_coefs[87] = 18'sd1;
+assign fir_coefs[88] = 18'sd0;
+assign fir_coefs[89] = 18'sd0;
+assign fir_coefs[90] = -18'sd1;
+assign fir_coefs[91] = -18'sd1;
+assign fir_coefs[92] = -18'sd1;
+assign fir_coefs[93] = 18'sd0;
+assign fir_coefs[94] = 18'sd0;
+assign fir_coefs[95] = 18'sd0;
+assign fir_coefs[96] = 18'sd1;
+assign fir_coefs[97] = 18'sd0;
+assign fir_coefs[98] = 18'sd0;
+assign fir_coefs[99] = 18'sd0;
+assign fir_coefs[100] = 18'sd0;
+assign fir_coefs[101] = 18'sd0;
+assign fir_coefs[102] = 18'sd0;
+assign fir_coefs[103] = 18'sd0;
+assign fir_coefs[104] = 18'sd0;
+assign fir_coefs[105] = 18'sd0;
+assign fir_coefs[106] = 18'sd0;
+assign fir_coefs[107] = 18'sd0;
+assign fir_coefs[108] = 18'sd0;
+assign fir_coefs[109] = 18'sd0;
+assign fir_coefs[110] = 18'sd0;
+assign fir_coefs[111] = 18'sd0;
+assign fir_coefs[112] = 18'sd0;
+assign fir_coefs[113] = 18'sd0;
+assign fir_coefs[114] = 18'sd0;
+assign fir_coefs[115] = 18'sd0;
+assign fir_coefs[116] = 18'sd0;
+assign fir_coefs[117] = 18'sd0;
+assign fir_coefs[118] = 18'sd0;
+assign fir_coefs[119] = 18'sd0;
+assign fir_coefs[120] = 18'sd0;
+assign fir_coefs[121] = 18'sd0;
+assign fir_coefs[122] = 18'sd0;
+assign fir_coefs[123] = 18'sd0;
+assign fir_coefs[124] = 18'sd0;
+assign fir_coefs[125] = 18'sd0;
+assign fir_coefs[126] = 18'sd0;
+assign fir_coefs[127] = 18'sd0;
 
-
-reg signed [7: 0] delay [0 : 79];
-reg init_flag = 0;
-
-integer i;
-always @(posedge clk) begin
-    if (init_flag == 0) begin
-        for (i = 0; i < 80; i = i + 1) begin
-            delay[i] <= 0;
-        end
-        init_flag <= 1;
-    end
-end
-
-
-reg signed [15: 0] coll_sum_pos = 0;
-reg signed [16: 0] coll_sum_neg = -1;
-
-reg signed [16: 0] tact_calc_neg [0 : 3];
-reg        [15: 0] tact_calc_pos [0 : 3];
-
-reg signed [7 : 0] result = 0;
-reg [6 : 0] index = 0;
-
-integer ii;
-
-always @(posedge clk) begin
-
-    if (index < 75 && ready)
-        index <= index + 4;
-    else begin
-        index <= 0;
-        result <= ((coll_sum_pos + coll_sum_neg + 1) >>> 8) & 16'shFF;
-
-        delay[0] <= input_sig;
-        for (ii = 1; ii < 80; ii = ii + 1) 
-            delay[ii] <= delay[ii - 1];
-    end
-
-    if (ready) begin
-
-        for (ii = 0; ii < 4; ii = ii + 1)
-            if ( (fir_coefs[index + ii] ^ delay[index + ii]) & 8'sh80 ) begin
-                tact_calc_neg[ii] <= fir_coefs[index + ii] * delay[index + ii] - 1;
-                tact_calc_pos[ii] <= 0; 
-            end
-            else begin
-                tact_calc_neg[ii] <= -1;
-                tact_calc_pos[ii] <= fir_coefs[index + ii] * delay[index + ii]; 
-            end 
-
-
-        if (index) begin
-            coll_sum_pos <= coll_sum_pos + tact_calc_pos[0] + tact_calc_pos[1] + tact_calc_pos[2] + tact_calc_pos[3];
-            coll_sum_neg <= coll_sum_neg + tact_calc_neg[0] + tact_calc_neg[1] + tact_calc_neg[2] + tact_calc_neg[3] + 4; 
-        end
-        else begin
-            coll_sum_pos <= 0;
-            coll_sum_neg <= -1;
-        end
-    end
-end
-
-
-
-assign filtred_sig = result;
 
 endmodule
