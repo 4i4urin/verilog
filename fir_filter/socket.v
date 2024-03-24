@@ -1,4 +1,6 @@
 `timescale 1ns / 1ps
+`define WIDTH 20
+
 
 module socket (
     input clk,
