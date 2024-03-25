@@ -1,5 +1,5 @@
 `timescale 1ns/1ns
-`define WIDTH 20
+`define WIDTH 18
 
 
 module fir_filter_sep (
@@ -22,13 +22,15 @@ initial
         delay[i] = 0;
 
 
-reg signed [`WIDTH*2-1: 0] coll_sum_pos = 0;
-reg signed [`WIDTH*2-1: 0] coll_sum_neg = -1;
+reg signed [`WIDTH+5-1: 0] coll_sum_pos = 0;
+reg signed [`WIDTH+5-1: 0] coll_sum_neg = -1;
 
 reg signed [`WIDTH-1 : 0] result = 0;
 
 reg [6 : 0] r_index = 8'h7F;
 reg [6 : 0] w_index = 0;
+reg [6 : 0] del_index = 0;
+
 
 always @(posedge clk) begin
 
@@ -42,11 +44,13 @@ always @(posedge clk) begin
     if (ready) begin
         r_index <= r_index + 1;
 
-        if (r_index)
-            if ( (fir_coefs[r_index] ^ delay[(w_index - r_index - 1) & 8'h7F]) & 16'sh8000)
-                coll_sum_neg <= coll_sum_neg + fir_coefs[r_index] * delay[(w_index - r_index - 1) & 8'h7F];
+        del_index <= w_index - r_index - 1;
+        if (r_index) begin
+            if ( (fir_coefs[r_index] & 18'sh20000) ^ (delay[del_index] & 18'sh20000) )
+                coll_sum_neg <= coll_sum_neg + fir_coefs[r_index] * delay[del_index];
             else
-                coll_sum_pos <= coll_sum_pos + fir_coefs[r_index] * delay[(w_index - r_index - 1) & 8'h7F];
+                coll_sum_pos <= coll_sum_pos + fir_coefs[r_index] * delay[del_index];
+        end
         else begin
             coll_sum_pos <= 0;
             coll_sum_neg <= -1;
