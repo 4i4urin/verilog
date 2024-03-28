@@ -25,18 +25,21 @@ initial
 reg signed [`WIDTH-1: 0] coll_sum = 0;
 reg signed [`WIDTH-1: 0] result = 0;
 
+
 reg [5 : 0] r_index = 8'h7F;
 reg [5 : 0] w_index = 0;
+reg [5 : 0] del_index = 0;
 
 
 always @(posedge clk) begin
 
     if (ready) begin
         r_index <= r_index + 1;
+        del_index <= w_index - r_index - 1;
         if ( r_index )
-            coll_sum <= coll_sum + fir_coefs[r_index] * delay[(w_index - r_index - 1) & 8'h7F];
+            coll_sum <= coll_sum + fir_coefs[r_index] * delay[del_index ];
         else
-            coll_sum <= fir_coefs[r_index] * delay[(w_index - r_index - 1) & 8'h7F];
+            coll_sum <= fir_coefs[r_index] * delay[del_index];
     end       
 
     if ( r_index == 8'h7F && ready) begin

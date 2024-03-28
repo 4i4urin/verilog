@@ -30,6 +30,7 @@ reg signed [`WIDTH-1 : 0] result = 0;
 reg [5 : 0] r_index = 8'h7F;
 reg [5 : 0] w_index = 0;
 
+
 always @(posedge clk) begin
 
     if ( r_index == 8'h7F && ready) begin
@@ -42,11 +43,13 @@ always @(posedge clk) begin
     if (ready) begin
         r_index <= r_index + 1;
 
-        if (r_index)
-            if ( (fir_coefs[r_index] ^ delay[(w_index - r_index - 1) & 8'h7F]) & 16'sh8000)
-                coll_sum_neg <= coll_sum_neg + fir_coefs[r_index] * delay[(w_index - r_index - 1) & 8'h7F];
+        del_index <= w_index - r_index - 1;
+        if (r_index) begin
+            if ( (fir_coefs[r_index] & 18'sh20000) ^ (delay[del_index] & 18'sh20000) )
+                coll_sum_neg <= coll_sum_neg + fir_coefs[r_index] * delay[del_index];
             else
-                coll_sum_pos <= coll_sum_pos + fir_coefs[r_index] * delay[(w_index - r_index - 1) & 8'h7F];
+                coll_sum_pos <= coll_sum_pos + fir_coefs[r_index] * delay[del_index];
+        end
         else begin
             coll_sum_pos <= 0;
             coll_sum_neg <= -1;
