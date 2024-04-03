@@ -12,14 +12,14 @@ module fir_filter_sep (
 );
 
 
-wire signed [`WIDTH-1 : 0] fir_coefs [0 : 63];
-reg signed [`WIDTH-1: 0] delay [0 : 63];
+(* ram_style = "distributed" *) wire signed [`WIDTH-1 : 0] fir_coefs [0 : 63];
+(* ram_style = "distributed" *) reg signed [`WIDTH-1: 0] delay [0 : 63];
 
 integer i;
 
-initial 
-    for (i = 0; i < 64; i = i + 1)
-        delay[i] = 0;
+//initial 
+//    for (i = 0; i < 64; i = i + 1)
+//        delay[i] = 0;
 
 
 reg signed [`WIDTH-1: 0] coll_sum_pos = 0;
@@ -27,13 +27,14 @@ reg signed [`WIDTH-1: 0] coll_sum_neg = -1;
 
 reg signed [`WIDTH-1 : 0] result = 0;
 
-reg [5 : 0] r_index = 8'h7F;
+reg [5 : 0] r_index = 8'h3F;
 reg [5 : 0] w_index = 0;
+reg [5 : 0] del_index = 0;
 
 
 always @(posedge clk) begin
 
-    if ( r_index == 8'h7F && ready) begin
+    if ( r_index == 8'h3F && ready) begin
         result <= ((coll_sum_pos + coll_sum_neg + 1) >>> 16);// & 18'sh3FF;
         
         w_index <= w_index + 1;
