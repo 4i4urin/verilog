@@ -1,5 +1,5 @@
 `timescale 1ns/1ns
-`define WIDTH 18
+`define WIDTH 24
 
 
 module tb_fir_filter ();
@@ -15,18 +15,16 @@ initial
 
 reg  signed [`WIDTH - 1 : 0] signal = 0;
 reg ready = 0;
-wire signed [`WIDTH - 1 : 0] filtred_sig;
-wire signed [`WIDTH - 1 : 0] filtred_sig_sep;
-
+//wire signed [`WIDTH - 1 : 0] filtred_sig;
+//wire signed [`WIDTH - 1 : 0] filtred_sig_sep;
+wire signed [`WIDTH - 1 : 0] some;
 
 socket some_socket(
     .clk (clk),
 
     .input_sig (signal),
     .ready (ready),
-
-    .filtred_sig(filtred_sig),
-    .filtred_sig_sep(filtred_sig_sep)
+    .some (some)
 );
 
 
@@ -49,7 +47,7 @@ always @(posedge clk) begin
             ready <= 1;
             signal <= input_signal[index];
             index <= index + 1;
-            $fdisplay(File_id, filtred_sig_sep);
+//            $fdisplay(File_id, filtred_sig_sep);
             // $fdisplay(File_id, filtred_sig);
         end
     end
