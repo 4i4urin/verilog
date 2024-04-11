@@ -1,5 +1,5 @@
 `timescale 1ns/1ns
-`define WIDTH 18
+`define WIDTH 24
 
 
 module fir_filter_sep (
@@ -17,9 +17,9 @@ module fir_filter_sep (
 
 integer i;
 
-initial 
-   for (i = 0; i < 128; i = i + 1)
-       delay[i] = 0;
+//initial 
+//   for (i = 0; i < 128; i = i + 1)
+//       delay[i] = 0;
 
 
 reg signed [`WIDTH-1: 0] coll_sum_pos = 0;
