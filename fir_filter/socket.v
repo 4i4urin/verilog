@@ -118,54 +118,54 @@ fir_filter fir_filter_0(
 
     .filtred_sig (fir_sig_0)
 );
-fir_filter fir_filter_1(
-    .clk (clk),
+//fir_filter fir_filter_1(
+//    .clk (clk),
 
-    .input_sig (input_sig_1),
-    .ready (ready),
+//    .input_sig (input_sig_1),
+//    .ready (ready),
 
-    .filtred_sig (fir_sig_1)
-);
-fir_filter fir_filter_2(
-    .clk (clk),
+//    .filtred_sig (fir_sig_1)
+//);
+//fir_filter fir_filter_2(
+//    .clk (clk),
 
-    .input_sig (input_sig_2),
-    .ready (ready),
+//    .input_sig (input_sig_2),
+//    .ready (ready),
 
-    .filtred_sig (fir_sig_2)
-);
-fir_filter fir_filter_3(
-    .clk (clk),
+//    .filtred_sig (fir_sig_2)
+//);
+//fir_filter fir_filter_3(
+//    .clk (clk),
 
-    .input_sig (input_sig_3),
-    .ready (ready),
+//    .input_sig (input_sig_3),
+//    .ready (ready),
 
-    .filtred_sig (fir_sig_3)
-);
-fir_filter fir_filter_4(
-    .clk (clk),
+//    .filtred_sig (fir_sig_3)
+//);
+//fir_filter fir_filter_4(
+//    .clk (clk),
 
-    .input_sig (input_sig_4),
-    .ready (ready),
+//    .input_sig (input_sig_4),
+//    .ready (ready),
 
-    .filtred_sig (fir_sig_4)
-);
-fir_filter fir_filter_5(
-    .clk (clk),
+//    .filtred_sig (fir_sig_4)
+//);
+//fir_filter fir_filter_5(
+//    .clk (clk),
 
-    .input_sig (input_sig_5),
-    .ready (ready),
+//    .input_sig (input_sig_5),
+//    .ready (ready),
 
-    .filtred_sig (fir_sig_5)
-);
-fir_filter fir_filter_6(
-    .clk (clk),
+//    .filtred_sig (fir_sig_5)
+//);
+//fir_filter fir_filter_6(
+//    .clk (clk),
 
-    .input_sig (input_sig_6),
-    .ready (ready),
+//    .input_sig (input_sig_6),
+//    .ready (ready),
 
-    .filtred_sig (fir_sig_6)
-);
+//    .filtred_sig (fir_sig_6)
+//);
 // fir_filter fir_filter_7(
 //     .clk (clk),
 
@@ -270,54 +270,54 @@ fir_filter_sep fir_filter_sep_0(
 
     .filtred_sig (fir_sig_sep_0)
 );
-fir_filter_sep fir_filter_sep_1(
-    .clk (clk),
+//fir_filter_sep fir_filter_sep_1(
+//    .clk (clk),
 
-    .input_sig (input_sig_1),
-    .ready (ready),
+//    .input_sig (input_sig_1),
+//    .ready (ready),
 
-    .filtred_sig (fir_sig_sep_1)
-);
-fir_filter_sep fir_filter_sep_2(
-    .clk (clk),
+//    .filtred_sig (fir_sig_sep_1)
+//);
+//fir_filter_sep fir_filter_sep_2(
+//    .clk (clk),
 
-    .input_sig (input_sig_2),
-    .ready (ready),
+//    .input_sig (input_sig_2),
+//    .ready (ready),
 
-    .filtred_sig (fir_sig_sep_2)
-);
-fir_filter_sep fir_filter_sep_3(
-    .clk (clk),
+//    .filtred_sig (fir_sig_sep_2)
+//);
+//fir_filter_sep fir_filter_sep_3(
+//    .clk (clk),
 
-    .input_sig (input_sig_3),
-    .ready (ready),
+//    .input_sig (input_sig_3),
+//    .ready (ready),
 
-    .filtred_sig (fir_sig_sep_3)
-);
-fir_filter_sep fir_filter_sep_4(
-    .clk (clk),
+//    .filtred_sig (fir_sig_sep_3)
+//);
+//fir_filter_sep fir_filter_sep_4(
+//    .clk (clk),
 
-    .input_sig (input_sig_4),
-    .ready (ready),
+//    .input_sig (input_sig_4),
+//    .ready (ready),
 
-    .filtred_sig (fir_sig_sep_4)
-);
-fir_filter_sep fir_filter_sep_5(
-    .clk (clk),
+//    .filtred_sig (fir_sig_sep_4)
+//);
+//fir_filter_sep fir_filter_sep_5(
+//    .clk (clk),
 
-    .input_sig (input_sig_5),
-    .ready (ready),
+//    .input_sig (input_sig_5),
+//    .ready (ready),
 
-    .filtred_sig (fir_sig_sep_5)
-);
-fir_filter_sep fir_filter_sep_6(
-    .clk (clk),
+//    .filtred_sig (fir_sig_sep_5)
+//);
+//fir_filter_sep fir_filter_sep_6(
+//    .clk (clk),
 
-    .input_sig (input_sig_6),
-    .ready (ready),
+//    .input_sig (input_sig_6),
+//    .ready (ready),
 
-    .filtred_sig (fir_sig_sep_6)
-);
+//    .filtred_sig (fir_sig_sep_6)
+//);
 // fir_filter_sep fir_filter_sep_7(
 //     .clk (clk),
 
