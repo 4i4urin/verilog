@@ -16,6 +16,29 @@ reg signed [`WIDTH - 1 : 0] result;
 wire signed [`WIDTH - 1 : 0] fir_sig;
 wire signed [`WIDTH - 1 : 0] fir_sig_sep;
 
+integer File_id;
+initial 
+    File_id = $fopen("output_verilog", "w");
+
+reg [10: 0] index = 0;
+reg [6 : 0] signal_delay = 0;
+always @(posedge clk) begin
+    signal_delay <= signal_delay + 1;
+
+    if ( !signal_delay ) begin
+        $fdisplay(File_id, fir_sig_sep);
+        index <= index + 1;
+
+        if (index == 399) begin
+            $display("ready");
+            $fclose(File_id);
+        end
+            
+    end
+        
+end
+
+
 
 always @(posedge clk) begin
     result <= fir_sig ^ fir_sig_sep;
@@ -104,8 +127,8 @@ always @(posedge clk) begin
         // input_sig_9 <= input_sig - 9;
     end
 
-    stub_sig <= fir_sig_0 ^ fir_sig_1 ^ fir_sig_2 ^ fir_sig_3 ^ fir_sig_4 ^
-         fir_sig_5 ^ fir_sig_6;// ^ fir_sig_7 ^ fir_sig_8 ^ fir_sig_9;
+    stub_sig <= fir_sig_0;// ^ fir_sig_1 ^ fir_sig_2 ^ fir_sig_3 ^ fir_sig_4 ^
+         // fir_sig_5 ^ fir_sig_6;// ^ fir_sig_7 ^ fir_sig_8 ^ fir_sig_9;
 end
 
 assign some = stub_sig;
@@ -255,8 +278,8 @@ always @(posedge clk) begin
         // input_sig_9 <= input_sig - 9;
     end
         
-    stub_sig <= fir_sig_sep_0 ^ fir_sig_sep_1 ^ fir_sig_sep_2 ^ fir_sig_sep_3 ^ fir_sig_sep_4 ^
-        fir_sig_sep_5 ^ fir_sig_sep_6;// ^ fir_sig_sep_7 ^ fir_sig_sep_8 ^ fir_sig_sep_9;
+    stub_sig <= fir_sig_sep_0;// ^ fir_sig_sep_1 ^ fir_sig_sep_2 ^ fir_sig_sep_3 ^ fir_sig_sep_4 ^
+        // fir_sig_sep_5 ^ fir_sig_sep_6;// ^ fir_sig_sep_7 ^ fir_sig_sep_8 ^ fir_sig_sep_9;
 end
 
 assign some = stub_sig;

@@ -50,26 +50,22 @@ always @(posedge clk) begin
         del_index <= w_index - r_index - 1;
 
         if (r_index) begin
-            m0 <=  fir_coefs[r_index];
+            m0 <= fir_coefs[r_index];
             m1 <= delay[del_index];
             
-            
-            mult <= m0 * m1 ;
-           
-           
+            mult <= m0 * m1;           
             coll_sum <= coll_sum + mult;
         
         end
         else begin
             coll_sum <= 0;
-           
         end
-
     end
 end
 
 
-assign filtred_sig = result>>> `WIDTH;
+// assign filtred_sig = result >>> `WIDTH;
+assign filtred_sig = result >>> 18;
 
 // # python3
 // from scipy.signal import kaiserord, firwin

@@ -15,11 +15,15 @@ x = cos(2*pi*0.5*t) + 0.2*sin(2*pi*2.5*t+0.1) + \
             0.1*sin(2*pi*23.45*t+.8)
 
 # x = (x - min(x))
-x = x * 255 / (max(x) - min(x)) - 3
+x = x * 262143
 x = x.astype(int)
-# print(x)
-# print(max(x), min(x))
+numpy.savetxt("input.txt", x, '%d')
+print(x)
+print(max(x), min(x))
+# with open("input.txt", "r") as f:
+#     number = [int(x) if x.strip().isdigit() or '-' in x else 0 for x in f.readlines() ]
 
+# x = number[:400]
 
 #------------------------------------------------
 # Create a FIR filter and apply it to x.
@@ -46,12 +50,13 @@ cutoff_hz = 10.0
 # Use firwin with a Kaiser window to create a lowpass FIR filter.
 taps = firwin(N, cutoff_hz/nyq_rate, window=('kaiser', beta))
 
-taps = (taps * 255).astype(int)
-# print(taps)
+taps = (taps * 262143).astype(int)
+print(taps)
 
 # Use lfilter to filter x with the FIR filter.
-filtered_x = (lfilter(taps, 1.0, x) / 255).astype(int)
-print(filtered_x)
+filtered_x = (lfilter(taps, 1.0, x) / 262143).astype(int)
+# print(filtered_x)
+# print(max(filtered_x), min(filtered_x))
 
 
 #------------------------------------------------
