@@ -46,26 +46,25 @@ always @(posedge clk) begin
 
     if (ready) begin
         r_index <= r_index + 1;
-
         del_index <= w_index - r_index - 1;
 
         if (r_index) begin
-            m0 <= fir_coefs[r_index];
+            m0 <=  fir_coefs[r_index];
             m1 <= delay[del_index];
             
-            mult <= m0 * m1;           
+            
+            mult <= m0 * m1 ;
             coll_sum <= coll_sum + mult;
-        
         end
         else begin
             coll_sum <= 0;
         end
+
     end
 end
 
 
-// assign filtred_sig = result >>> `WIDTH;
-assign filtred_sig = result >>> 18;
+assign filtred_sig = result>>> 18;
 
 // # python3
 // from scipy.signal import kaiserord, firwin
@@ -81,7 +80,7 @@ assign filtred_sig = result >>> 18;
 // cutoff_hz = 10.0
 
 // taps = firwin(128, cutoff_hz/nyq_rate, window=('kaiser', beta))
-// taps = (taps * 255).astype(int)
+// taps = (taps/max(abs(taps)) * (2**17-1)).astype(int)
 // count = 0
 // for tap in taps:
 //     print(f"assign fir_coefs[{count}] = ", end="")
