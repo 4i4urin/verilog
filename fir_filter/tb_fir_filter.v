@@ -27,16 +27,14 @@ socket some_socket(
 );
 
 
-integer File_id,File_id2;
+integer File_id;
 
 initial begin
-    File_id = $fopen("output_verilog", "w");
     // $readmemh("signal.txt", input_signal);
-    File_id2 = $fopen("input.txt", "r");
+    File_id = $fopen("input.txt", "r");
 end
 
 
-reg [63: 0] index = 0;
 reg [6 : 0] signal_delay = 0;
 
 always @(posedge clk) begin
@@ -46,10 +44,7 @@ always @(posedge clk) begin
         if ( !signal_delay ) begin
             ready <= 1;
             
-            $fscanf(File_id2, "%d\n", signal); 
-
-            
-            index <= index + 1;
+            $fscanf(File_id, "%d\n", signal); 
 //            $fdisplay(File_id, filtred_sig_sep);
             // $fdisplay(File_id, filtred_sig);
         end

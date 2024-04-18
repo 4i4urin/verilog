@@ -11,6 +11,28 @@ module socket (
     output signed [`WIDTH - 1 : 0] some
 );
 
+integer File_id;
+initial
+    File_id = $fopen("output_verilog","w");
+
+reg [16: 0] index = 0;
+reg [6 : 0] signal_delay = 0;
+always @(posedge clk) begin
+    signal_delay <= signal_delay + 1;
+    if ( !signal_delay ) begin
+        $fdisplay(File_id, fir_sig);
+        // $fdisplay(File_id, fir_sig_sep);
+        index <= index + 1;
+
+        if (index == 399) begin
+            $display("ready");
+            $fclose(File_id);
+        end
+    end
+end
+    
+
+
 reg signed [`WIDTH - 1 : 0] result;
 
 wire signed [`WIDTH - 1 : 0] fir_sig;
@@ -56,10 +78,10 @@ module socket_fir (
 
 
 wire signed [`WIDTH - 1 : 0] fir_sig_0;
-wire signed [`WIDTH - 1 : 0] fir_sig_1;
-wire signed [`WIDTH - 1 : 0] fir_sig_2;
-wire signed [`WIDTH - 1 : 0] fir_sig_3;
-wire signed [`WIDTH - 1 : 0] fir_sig_4;
+// wire signed [`WIDTH - 1 : 0] fir_sig_1;
+// wire signed [`WIDTH - 1 : 0] fir_sig_2;
+// wire signed [`WIDTH - 1 : 0] fir_sig_3;
+// wire signed [`WIDTH - 1 : 0] fir_sig_4;
 // wire signed [`WIDTH - 1 : 0] fir_sig_5;
 // wire signed [`WIDTH - 1 : 0] fir_sig_6;
 // wire signed [`WIDTH - 1 : 0] fir_sig_7;
@@ -67,10 +89,10 @@ wire signed [`WIDTH - 1 : 0] fir_sig_4;
 // wire signed [`WIDTH - 1 : 0] fir_sig_9;
 
 reg signed [`WIDTH - 1 : 0] input_sig_0;
-reg signed [`WIDTH - 1 : 0] input_sig_1;
-reg signed [`WIDTH - 1 : 0] input_sig_2;
-reg signed [`WIDTH - 1 : 0] input_sig_3;
-reg signed [`WIDTH - 1 : 0] input_sig_4;
+// reg signed [`WIDTH - 1 : 0] input_sig_1;
+// reg signed [`WIDTH - 1 : 0] input_sig_2;
+// reg signed [`WIDTH - 1 : 0] input_sig_3;
+// reg signed [`WIDTH - 1 : 0] input_sig_4;
 // reg signed [`WIDTH - 1 : 0] input_sig_5;
 // reg signed [`WIDTH - 1 : 0] input_sig_6;
 // reg signed [`WIDTH - 1 : 0] input_sig_7;
@@ -82,10 +104,10 @@ reg signed [`WIDTH - 1 : 0] stub_sig;
 always @(posedge clk) begin
     input_sig_0 <= input_sig;
     if (input_sig < 0) begin
-        input_sig_1 <= input_sig + 1;
-        input_sig_2 <= input_sig + 2;
-        input_sig_3 <= input_sig + 3;
-        input_sig_4 <= input_sig + 4;
+        // input_sig_1 <= input_sig + 1;
+        // input_sig_2 <= input_sig + 2;
+        // input_sig_3 <= input_sig + 3;
+        // input_sig_4 <= input_sig + 4;
         // input_sig_5 <= input_sig + 5;
         // input_sig_6 <= input_sig + 6;
         // input_sig_7 <= input_sig + 7;
@@ -93,10 +115,10 @@ always @(posedge clk) begin
         // input_sig_9 <= input_sig + 9;
     end
     else begin
-        input_sig_1 <= input_sig - 1;
-        input_sig_2 <= input_sig - 2;
-        input_sig_3 <= input_sig - 3;
-        input_sig_4 <= input_sig - 4;
+        // input_sig_1 <= input_sig - 1;
+        // input_sig_2 <= input_sig - 2;
+        // input_sig_3 <= input_sig - 3;
+        // input_sig_4 <= input_sig - 4;
         // input_sig_5 <= input_sig - 5;
         // input_sig_6 <= input_sig - 6;
         // input_sig_7 <= input_sig - 7;
@@ -104,7 +126,7 @@ always @(posedge clk) begin
         // input_sig_9 <= input_sig - 9;
     end
 
-    stub_sig <= fir_sig_0 ^ fir_sig_1 ^ fir_sig_2 ^ fir_sig_3 ^ fir_sig_4;// ^
+    stub_sig <= fir_sig_0; //^ fir_sig_1 ^ fir_sig_2 ^ fir_sig_3 ^ fir_sig_4;// ^
          // fir_sig_5 ^ fir_sig_6;// ^ fir_sig_7 ^ fir_sig_8 ^ fir_sig_9;
 end
 
@@ -118,38 +140,38 @@ fir_filter fir_filter_0(
 
     .filtred_sig (fir_sig_0)
 );
-fir_filter fir_filter_1(
-   .clk (clk),
+// fir_filter fir_filter_1(
+//    .clk (clk),
 
-   .input_sig (input_sig_1),
-   .ready (ready),
+//    .input_sig (input_sig_1),
+//    .ready (ready),
 
-   .filtred_sig (fir_sig_1)
-);
-fir_filter fir_filter_2(
-   .clk (clk),
+//    .filtred_sig (fir_sig_1)
+// );
+// fir_filter fir_filter_2(
+//    .clk (clk),
 
-   .input_sig (input_sig_2),
-   .ready (ready),
+//    .input_sig (input_sig_2),
+//    .ready (ready),
 
-   .filtred_sig (fir_sig_2)
-);
-fir_filter fir_filter_3(
-   .clk (clk),
+//    .filtred_sig (fir_sig_2)
+// );
+// fir_filter fir_filter_3(
+//    .clk (clk),
 
-   .input_sig (input_sig_3),
-   .ready (ready),
+//    .input_sig (input_sig_3),
+//    .ready (ready),
 
-   .filtred_sig (fir_sig_3)
-);
-fir_filter fir_filter_4(
-   .clk (clk),
+//    .filtred_sig (fir_sig_3)
+// );
+// fir_filter fir_filter_4(
+//    .clk (clk),
 
-   .input_sig (input_sig_4),
-   .ready (ready),
+//    .input_sig (input_sig_4),
+//    .ready (ready),
 
-   .filtred_sig (fir_sig_4)
-);
+//    .filtred_sig (fir_sig_4)
+// );
 //fir_filter fir_filter_5(
 //    .clk (clk),
 
@@ -206,10 +228,10 @@ module socket_fir_sep (
 
 
 wire signed [`WIDTH - 1 : 0] fir_sig_sep_0;
-wire signed [`WIDTH - 1 : 0] fir_sig_sep_1;
-wire signed [`WIDTH - 1 : 0] fir_sig_sep_2;
-wire signed [`WIDTH - 1 : 0] fir_sig_sep_3;
-wire signed [`WIDTH - 1 : 0] fir_sig_sep_4;
+// wire signed [`WIDTH - 1 : 0] fir_sig_sep_1;
+// wire signed [`WIDTH - 1 : 0] fir_sig_sep_2;
+// wire signed [`WIDTH - 1 : 0] fir_sig_sep_3;
+// wire signed [`WIDTH - 1 : 0] fir_sig_sep_4;
 // wire signed [`WIDTH - 1 : 0] fir_sig_sep_5;
 // wire signed [`WIDTH - 1 : 0] fir_sig_sep_6;
 // wire signed [`WIDTH - 1 : 0] fir_sig_sep_7;
@@ -217,10 +239,10 @@ wire signed [`WIDTH - 1 : 0] fir_sig_sep_4;
 // wire signed [`WIDTH - 1 : 0] fir_sig_sep_9;
 
 reg signed [`WIDTH - 1 : 0] input_sig_0;
-reg signed [`WIDTH - 1 : 0] input_sig_1;
-reg signed [`WIDTH - 1 : 0] input_sig_2;
-reg signed [`WIDTH - 1 : 0] input_sig_3;
-reg signed [`WIDTH - 1 : 0] input_sig_4;
+// reg signed [`WIDTH - 1 : 0] input_sig_1;
+// reg signed [`WIDTH - 1 : 0] input_sig_2;
+// reg signed [`WIDTH - 1 : 0] input_sig_3;
+// reg signed [`WIDTH - 1 : 0] input_sig_4;
 // reg signed [`WIDTH - 1 : 0] input_sig_5;
 // reg signed [`WIDTH - 1 : 0] input_sig_6;
 // reg signed [`WIDTH - 1 : 0] input_sig_7;
@@ -233,10 +255,10 @@ reg signed [`WIDTH - 1 : 0] stub_sig;
 always @(posedge clk) begin
     input_sig_0 <= input_sig;
     if (input_sig < 0) begin
-        input_sig_1 <= input_sig + 1;
-        input_sig_2 <= input_sig + 2;
-        input_sig_3 <= input_sig + 3;
-        input_sig_4 <= input_sig + 4;
+        // input_sig_1 <= input_sig + 1;
+        // input_sig_2 <= input_sig + 2;
+        // input_sig_3 <= input_sig + 3;
+        // input_sig_4 <= input_sig + 4;
         // input_sig_5 <= input_sig + 5;
         // input_sig_6 <= input_sig + 6;
         // input_sig_7 <= input_sig + 7;
@@ -244,10 +266,10 @@ always @(posedge clk) begin
         // input_sig_9 <= input_sig + 9;
     end
     else begin
-        input_sig_1 <= input_sig - 1;
-        input_sig_2 <= input_sig - 2;
-        input_sig_3 <= input_sig - 3;
-        input_sig_4 <= input_sig - 4;
+        // input_sig_1 <= input_sig - 1;
+        // input_sig_2 <= input_sig - 2;
+        // input_sig_3 <= input_sig - 3;
+        // input_sig_4 <= input_sig - 4;
         // input_sig_5 <= input_sig - 5;
         // input_sig_6 <= input_sig - 6;
         // input_sig_7 <= input_sig - 7;
@@ -255,7 +277,7 @@ always @(posedge clk) begin
         // input_sig_9 <= input_sig - 9;
     end
         
-    stub_sig <= fir_sig_sep_0 ^ fir_sig_sep_1 ^ fir_sig_sep_2 ^ fir_sig_sep_3 ^ fir_sig_sep_4;// ^
+    stub_sig <= fir_sig_sep_0; //^ fir_sig_sep_1 ^ fir_sig_sep_2 ^ fir_sig_sep_3 ^ fir_sig_sep_4;// ^
         // fir_sig_sep_5 ^ fir_sig_sep_6;// ^ fir_sig_sep_7 ^ fir_sig_sep_8 ^ fir_sig_sep_9;
 end
 
@@ -270,38 +292,38 @@ fir_filter_sep fir_filter_sep_0(
 
     .filtred_sig (fir_sig_sep_0)
 );
-fir_filter_sep fir_filter_sep_1(
-   .clk (clk),
+// fir_filter_sep fir_filter_sep_1(
+//    .clk (clk),
 
-   .input_sig (input_sig_1),
-   .ready (ready),
+//    .input_sig (input_sig_1),
+//    .ready (ready),
 
-   .filtred_sig (fir_sig_sep_1)
-);
-fir_filter_sep fir_filter_sep_2(
-   .clk (clk),
+//    .filtred_sig (fir_sig_sep_1)
+// );
+// fir_filter_sep fir_filter_sep_2(
+//    .clk (clk),
 
-   .input_sig (input_sig_2),
-   .ready (ready),
+//    .input_sig (input_sig_2),
+//    .ready (ready),
 
-   .filtred_sig (fir_sig_sep_2)
-);
-fir_filter_sep fir_filter_sep_3(
-   .clk (clk),
+//    .filtred_sig (fir_sig_sep_2)
+// );
+// fir_filter_sep fir_filter_sep_3(
+//    .clk (clk),
 
-   .input_sig (input_sig_3),
-   .ready (ready),
+//    .input_sig (input_sig_3),
+//    .ready (ready),
 
-   .filtred_sig (fir_sig_sep_3)
-);
-fir_filter_sep fir_filter_sep_4(
-   .clk (clk),
+//    .filtred_sig (fir_sig_sep_3)
+// );
+// fir_filter_sep fir_filter_sep_4(
+//    .clk (clk),
 
-   .input_sig (input_sig_4),
-   .ready (ready),
+//    .input_sig (input_sig_4),
+//    .ready (ready),
 
-   .filtred_sig (fir_sig_sep_4)
-);
+//    .filtred_sig (fir_sig_sep_4)
+// );
 //fir_filter_sep fir_filter_sep_5(
 //    .clk (clk),
 

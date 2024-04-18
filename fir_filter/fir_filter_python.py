@@ -1,4 +1,4 @@
-from numpy import cos, sin, pi, absolute, arange
+from numpy import cos, sin, pi, absolute, arange, round
 from scipy.signal import kaiserord, lfilter, firwin, freqz
 from pylab import figure, clf, plot, xlabel, ylabel, xlim, ylim, title, grid, axes, show
 import numpy
@@ -15,11 +15,10 @@ x = cos(2*pi*0.5*t) + 0.2*sin(2*pi*2.5*t+0.1) + \
             0.1*sin(2*pi*23.45*t+.8)
 
 # x = (x - min(x))
-x = x * 262143
-x = x.astype(int)
+x = round( ((x/max(abs(x))) * (2**18-1)) )
 numpy.savetxt("input.txt", x, '%d')
-print(x)
-print(max(x), min(x))
+# print(x)
+# print(max(x), min(x))
 # with open("input.txt", "r") as f:
 #     number = [int(x) if x.strip().isdigit() or '-' in x else 0 for x in f.readlines() ]
 
@@ -50,11 +49,10 @@ cutoff_hz = 10.0
 # Use firwin with a Kaiser window to create a lowpass FIR filter.
 taps = firwin(N, cutoff_hz/nyq_rate, window=('kaiser', beta))
 
-taps = (taps * 262143).astype(int)
-print(taps)
+taps = round((taps/max(abs(taps)) * (2**16-1)))
 
 # Use lfilter to filter x with the FIR filter.
-filtered_x = (lfilter(taps, 1.0, x) / 262143).astype(int)
+filtered_x = round(lfilter(taps, 1.0, x) / (2**16-1))
 # print(filtered_x)
 # print(max(filtered_x), min(filtered_x))
 
@@ -108,7 +106,7 @@ with open("output_verilog", "r") as f:
 
 figure(3)
 # Plot the original signal.
-plot(t, x)
+plot(t, x*4)
 # Plot the filtered signal, shifted to compensate for the phase delay.
 plot(t-delay, number, 'r-')
 # Plot just the "good" part of the filtered signal.  The first N-1
