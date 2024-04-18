@@ -39,38 +39,37 @@ reg signed [`WIDTH-1 : 0] m1_abs;
 
 wire  [`WIDTH-2 : 0] m0_unsigned = m0_abs[`WIDTH-2 : 0];
 wire  [`WIDTH-2 : 0] m1_unsigned = m1_abs[`WIDTH-2 : 0];
-reg s0, s1, mult_s, s0_d, s1_d;
+reg s0,s1,mult_s;
 
 
 always @(posedge clk) begin
 
     if ( r_index == 8'h7F && ready) begin
-        // result <= $signed({1'b0,coll_sum_pos}) - $signed({1'b0,coll_sum_neg}) + 1;// & 18'sh3FF;
-        result <= coll_sum_pos - coll_sum_neg;// & 18'sh3FF;
-
+        // result <=   $signed({1'b0,coll_sum_pos}) - $signed({1'b0,coll_sum_neg}) ;// & 18'sh3FF;
+        result <= coll_sum_pos - coll_sum_neg;
+        
         w_index <= w_index + 1;
         delay[w_index] <= input_sig;
     end
 
     if (ready) begin
         r_index <= r_index + 1;
+
         del_index <= w_index - r_index - 1;
 
         if (r_index) begin
-            m0 <= fir_coefs[r_index];
+            m0 <=  fir_coefs[r_index];
             m1 <= delay[del_index];
             
             m0_abs <= m0[`WIDTH-1] ? -m0 : m0;
             m1_abs <= m1[`WIDTH-1] ? -m1 : m1;
                         
+            
+            
             s0 <= m0[`WIDTH-1];
             s1 <= m1[`WIDTH-1];
-
-            s0_d <= s0;
-            s1_d <= s1;
-
-            mult <= m0_unsigned * m1_unsigned;
-            mult_s = s0_d ^ s1_d;
+            mult <= m0_unsigned * m1_unsigned ;
+            mult_s <= s1 ^ s0;
             if ( mult_s )
                 coll_sum_neg <= coll_sum_neg + mult;
             else
@@ -85,7 +84,6 @@ always @(posedge clk) begin
 end
 
 
-// assign filtred_sig = result >>> `WIDTH;
 assign filtred_sig = result >>> 18;
 
 // # python3
