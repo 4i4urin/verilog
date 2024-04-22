@@ -34,6 +34,9 @@ reg [6 : 0] del_index = 0;
 reg signed [`WIDTH-1 : 0] m0;
 reg signed [`WIDTH-1 : 0] m1;
 
+reg signed [`WIDTH-1 : 0] m0_d;
+reg signed [`WIDTH-1 : 0] m1_d;
+
 
 always @(posedge clk) begin
 
@@ -51,9 +54,12 @@ always @(posedge clk) begin
         if (r_index) begin
             m0 <=  fir_coefs[r_index];
             m1 <= delay[del_index];
+
+            m0_d <= m0;
+            m1_d <= m1;
             
             
-            mult <= m0 * m1 ;
+            mult <= m0_d * m1_d ;
             coll_sum <= coll_sum + mult;
         end
         else begin

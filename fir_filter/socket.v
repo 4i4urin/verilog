@@ -24,7 +24,7 @@ always @(posedge clk) begin
         // $fdisplay(File_id, fir_sig_sep);
         index <= index + 1;
 
-        if (index == 399) begin
+        if (index == 799) begin
             $display("ready");
             $fclose(File_id);
         end

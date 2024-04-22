@@ -8,21 +8,10 @@ import numpy
 #------------------------------------------------
 
 sample_rate = 100.0
-nsamples = 400
+nsamples = 800
 t = arange(nsamples) / sample_rate
-x = cos(2*pi*0.5*t) + 0.2*sin(2*pi*2.5*t+0.1) + \
-        0.2*sin(2*pi*15.3*t) + 0.1*sin(2*pi*16.7*t + 0.1) + \
-            0.1*sin(2*pi*23.45*t+.8)
-
-# x = (x - min(x))
-x = round( ((x/max(abs(x))) * (2**18-1)) )
-numpy.savetxt("input.txt", x, '%d')
-# print(x)
-# print(max(x), min(x))
-# with open("input.txt", "r") as f:
-#     number = [int(x) if x.strip().isdigit() or '-' in x else 0 for x in f.readlines() ]
-
-# x = number[:400]
+with open("input.txt", "r") as f:
+    x = [int(num) if num.strip().isdigit() or '-' in num else 0 for num in f.readlines() ]
 
 #------------------------------------------------
 # Create a FIR filter and apply it to x.
@@ -53,46 +42,6 @@ taps = round((taps/max(abs(taps)) * (2**16-1)))
 
 # Use lfilter to filter x with the FIR filter.
 filtered_x = round(lfilter(taps, 1.0, x) / (2**16-1))
-# print(filtered_x)
-# print(max(filtered_x), min(filtered_x))
-
-
-#------------------------------------------------
-# Plot the FIR filter coefficients.
-#------------------------------------------------
-
-# figure(1)
-# plot(taps, 'bo-', linewidth=2)
-# title('Filter Coefficients (%d taps)' % N)
-# grid(True)
-
-#------------------------------------------------
-# Plot the magnitude response of the filter.
-#------------------------------------------------
-
-# figure(2)
-# clf()
-# w, h = freqz(taps, worN=8000)
-# plot((w/pi)*nyq_rate, absolute(h), linewidth=2)
-# xlabel('Frequency (Hz)')
-# ylabel('Gain')
-# title('Frequency Response')
-# ylim(-0.05, 1.05)
-# grid(True)
-
-# # Upper inset plot.
-# ax1 = axes([0.42, 0.6, .45, .25])
-# plot((w/pi)*nyq_rate, absolute(h), linewidth=2)
-# xlim(0,8.0)
-# ylim(0.9985, 1.001)
-# grid(True)
-
-# # Lower inset plot
-# ax2 = axes([0.42, 0.25, .45, .25])
-# plot((w/pi)*nyq_rate, absolute(h), linewidth=2)
-# xlim(12.0, 20.0)
-# ylim(0.0, 0.0025)
-# grid(True)
 
 #------------------------------------------------
 # Plot the original and filtered signals.
@@ -104,9 +53,9 @@ delay = 0.5 * (N-1) / sample_rate
 with open("output_verilog", "r") as f:
     number = [int(x) if x.strip().isdigit() or '-' in x else 0 for x in f.readlines() ]
 
-figure(3)
+figure(1)
 # Plot the original signal.
-plot(t, x*4)
+plot(t, x)
 # Plot the filtered signal, shifted to compensate for the phase delay.
 plot(t-delay, number, 'r-')
 # Plot just the "good" part of the filtered signal.  The first N-1
