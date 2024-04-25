@@ -1,5 +1,5 @@
 `timescale 1ns/1ns
-`define WIDTH 24
+`define WIDTH 20
 
 
 module tb_fir_filter ();
@@ -59,25 +59,5 @@ begin
     $dumpvars;
 end
 
-// # python 3
-// from numpy import cos, sin, pi, absolute, arange
-
-// sample_rate = 100.0
-// nsamples = 400
-// count = 0
-// t = arange(nsamples) / sample_rate
-// x = cos(2*pi*0.5*t) + 0.2*sin(2*pi*2.5*t+0.1) + \
-//         0.2*sin(2*pi*15.3*t) + 0.1*sin(2*pi*16.7*t + 0.1) + \
-//             0.1*sin(2*pi*23.45*t+.8)
-// x = x * 255 / (max(x) - min(x)) - 3
-// x = x.astype(int)
-// print(max(x), min(x))
-// for val in x:
-//     print(f"assign input_signal[{count}] = ", end="")
-//     if val < 0:
-//         print(f"-`WIDTH'sd{abs(val)};")
-//     else:
-//         print(f"`WIDTH'sd{val};")
-//     count += 1
 
 endmodule

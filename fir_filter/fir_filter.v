@@ -1,5 +1,5 @@
 `timescale 1ns/1ns
-`define WIDTH 24
+`define WIDTH 20
 
 
 module fir_filter (
@@ -223,5 +223,6 @@ assign fir_coefs[124] = `WIDTH'sd10;
 assign fir_coefs[125] = `WIDTH'sd19;
 assign fir_coefs[126] = `WIDTH'sd18;
 assign fir_coefs[127] = `WIDTH'sd10;
+
 
 endmodule

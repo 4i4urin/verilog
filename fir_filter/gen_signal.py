@@ -7,13 +7,13 @@ def gen_in_range(nsamples, t):
                 0.1*sin(2*pi*23.45*t+.8)
     rand = random.randn(nsamples)
     x = x + (rand/max(abs(rand))) / 3
-    x = round( ((x/max(abs(x))) * (2**18-1)) )
+    x = round( ((x/max(abs(x))) * (2**16-1)) )
     return x
 
 
 def gen_noise(nsamples):
     x = random.randn(nsamples)
-    x = x/max(abs(x)) * (2**18-1)
+    x = x/max(abs(x)) * (2**16-1)
     return x
 
 
@@ -23,7 +23,7 @@ def gen_out_range(nsamples, t):
                 0.1*sin(2*pi*23.45*t+.8)
     rand = random.randn(nsamples)
     x = x + (rand/max(abs(rand))) / 3
-    x = round( ((x/max(abs(x))) * (2**18-1)) )
+    x = round( ((x/max(abs(x))) * (2**16-1)) )
     return x
 
 

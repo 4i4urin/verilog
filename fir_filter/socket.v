@@ -1,5 +1,5 @@
 `timescale 1ns / 1ps
-`define WIDTH 24
+`define WIDTH 20
 
 
 module socket (
@@ -20,8 +20,8 @@ reg [6 : 0] signal_delay = 0;
 always @(posedge clk) begin
     signal_delay <= signal_delay + 1;
     if ( !signal_delay ) begin
-        $fdisplay(File_id, fir_sig);
-        // $fdisplay(File_id, fir_sig_sep);
+        // $fdisplay(File_id, fir_sig);
+        $fdisplay(File_id, fir_sig_sep);
         index <= index + 1;
 
         if (index == 799) begin

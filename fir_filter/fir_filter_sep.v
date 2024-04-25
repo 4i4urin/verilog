@@ -1,5 +1,5 @@
 `timescale 1ns/1ns
-`define WIDTH 24
+`define WIDTH 20
 
 
 module fir_filter_sep (
