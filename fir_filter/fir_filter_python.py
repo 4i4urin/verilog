@@ -38,10 +38,10 @@ cutoff_hz = 10.0
 # Use firwin with a Kaiser window to create a lowpass FIR filter.
 taps = firwin(N, cutoff_hz/nyq_rate, window=('kaiser', beta))
 
-taps = round((taps/max(abs(taps)) * (2**16-1)))
+taps = round((taps/max(abs(taps)) * (2**12-1)))
 
 # Use lfilter to filter x with the FIR filter.
-filtered_x = round(lfilter(taps, 1.0, x) / (2**16-1))
+filtered_x = round(lfilter(taps, 1.0, x) / (2**12-1))
 
 #------------------------------------------------
 # Plot the original and filtered signals.

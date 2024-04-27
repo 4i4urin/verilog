@@ -1,5 +1,5 @@
 `timescale 1ns/1ns
-`define WIDTH 20
+`define WIDTH 16
 
 
 module tb_fir_filter ();

@@ -1,5 +1,5 @@
 `timescale 1ns / 1ps
-`define WIDTH 20
+`define WIDTH 16
 
 
 module socket (
